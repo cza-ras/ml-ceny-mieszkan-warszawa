@@ -110,3 +110,8 @@ Za pomocą próbki danych w tabeli "ml_sample_data" zawierających kilka dat z p
   "DataCzytelna": "2024-07-11"
 }]
 ```
+
+## Przykład
+Wykres obrazujący prognozowane ceny dla dzielnicy Bemowo dla okresu od 09.2024 do 07.2025 w oparciu o dane uczące z okresu od 04.2024 - 08.2024. Jak widać na wykresie ten dosyć prosty model regresji liniowej jest zbieżny ze zwykłą linią trendu.
+
+![Wykres prognozy cen mieszkań Bemowo](chart.png)
