@@ -2,21 +2,79 @@
 
 ## Model (ML) regresji liniowej (linear regression) w BigQuery przewidujący ceny mieszkań w Warszawie na podstawie danych zescrapowanych z serwisu otodom.pl
 
-**Dane**
+### Dane
 
-Dane pochodzą z codziennego scrape'ingu ogłoszeń dla Warszawy z serwisu otodom.pl i zapisywane są w tabeli w BiqQuery przy pomocy dedykowanego skryptu w Python. Zestaw danych zawiera: _Datę scrape'ingu, cenę z oferty, dzielnicę_. Dane następnie agregowane są do widoku ze średnimi cenami ofertowymi dla dzielnicy i dnia ("vw_for_model")
+Dane pochodzą z codziennego scrape'ingu ogłoszeń dla Warszawy z serwisu otodom.pl i zapisywane są w tabeli w BiqQuery przy pomocy dedykowanego skryptu w Python. Zestaw danych zawiera: **Datę scrape'ingu (w formacie UNIX), cenę z oferty, dzielnicę**. Dane następnie agregowane są do widoku ze średnimi cenami ofertowymi dla dzielnicy i dnia ("vw_for_model"). Przykładowe dane poniżej w formacie JSON.
 
-**Tworzenie modelu**
+```
+[{
+  "DataOferty": "19828",
+  "Cena": "2196338.423076923",
+  "Dzielnica": "Wola"
+}, {
+  "DataOferty": "19828",
+  "Cena": "798750",
+  "Dzielnica": "Białołęka"
+}, {
+  "DataOferty": "19828",
+  "Cena": "982497.555555556",
+  "Dzielnica": "Mokotów"
+}, {
+  "DataOferty": "19828",
+  "Cena": "1131180",
+  "Dzielnica": "Żoliborz"
+}, {
+  "DataOferty": "19828",
+  "Cena": "2300184.538461538",
+  "Dzielnica": "Śródmieście"
+}]
+```
+
+### Tworzenie modelu
 
 Proces uczenia maszynowego na danych z powyższego widoku za pomocą skryptu "create_model.sql"
 
-**Ewaluacja modelu**
+### Ewaluacja modelu
 
-Sprawdzenie statystyk modelu za pomocą skryptu "evaluate_model.sql"
+Sprawdzenie statystyk modelu za pomocą skryptu "evaluate_model.sql". Przykładowy wynik poniżej w formacie JSON.
 
-**Wykorzystanie modelu**
+```
+[{
+  "mean_absolute_error": "161364.2666327027",
+  "mean_squared_error": "63040396523.2301",
+  "mean_squared_log_error": "0.045719978667971006",
+  "median_absolute_error": "109749.25738779735",
+  "r2_score": "0.42327589886201256",
+  "explained_variance": "0.42340712541032521"
+}]
+```
+
+### Wykorzystanie modelu
 
 Za pomocą próbki danych w tabeli "ml_sample_data" zawierających kilka dat z przyszłości, kilka z przeszłości oraz nazwy dzielnic wykorzystujemy utworzony model "ceny_mieszkan_wwa" do przewidywania ceny w danym dniu, danej dzielnicy - skrypt "use_model.sql"
+
+**Przykładowe dane wejściowe**
+```
+[{
+  "Dzielnica": "Bemowo",
+  "DataOferty": "2024-12-19"
+}, {
+  "Dzielnica": "Mokotów",
+  "DataOferty": "2024-12-20"
+}, {
+  "Dzielnica": "Bemowo",
+  "DataOferty": "2025-12-18"
+}, {
+  "Dzielnica": "Żoliborz",
+  "DataOferty": "2024-07-11"
+}, {
+  "Dzielnica": "Żoliborz",
+  "DataOferty": "2024-09-11"
+}, {
+  "Dzielnica": "Żoliborz",
+  "DataOferty": "2024-08-08"
+}]
+```
 
 **Przykładowy wynik w formacie JSON**
 ```
