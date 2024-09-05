@@ -1,0 +1,1 @@
+Model (ML) regresji liniowej (linear regression) w BigQuery przewidujący ceny mieszkań w Warszawie na podstawie danych zescrapowanych z serwisu otodom.pl
